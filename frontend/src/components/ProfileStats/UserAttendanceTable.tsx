@@ -170,9 +170,10 @@ const columns: TableColumnsType<attendanceType> = [
     return (
     <div>
     <Table
+        title={() => <h1 className='text-xl font-bold text-primary font-secondary'>Attendance Record</h1>}
         columns={columns}
         dataSource={userAttendance}
-        pagination={{ position: ['bottomCenter'] }}
+        pagination={{ position: ['bottomRight'], pageSize: 5 }}
         scroll={{ x: 1000 }}
         bordered
     />

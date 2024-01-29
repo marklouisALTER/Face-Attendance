@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { SignIn } from './Pages/SignIn'
 import { lazy, Suspense } from 'react'
+import { Spin } from 'antd'
 import { UserAttendanceTable } from './components/ProfileStats/UserAttendanceTable'
 import { UserPhotos } from './components/ProfileStats/UserPhotos'
 const Dashboard = lazy(() => import('./Pages/admin/Dashboard'))
@@ -22,19 +23,19 @@ function App() {
         <Route path="/" element={<SignIn />} />
         <Route path="/dashboard" element={<AdminLayout />} >
           <Route index element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div className='w-full h-screen flex items-center justify-center'><Spin /></div>}>
               <Dashboard />
             </Suspense>
           } 
           />
           <Route path="tracking-record/employee-profile" element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div className='w-full h-screen flex items-center justify-center'><Spin /></div>}>
               <TeacherProfile />
             </Suspense>
           } />
           
           <Route path="tracking-record/attendance-record" element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div className='w-full h-screen flex items-center justify-center'><Spin /></div>}>
               <AttendanceRecordLayout />
             </Suspense>
           }>

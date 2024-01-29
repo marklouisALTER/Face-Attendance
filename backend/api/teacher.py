@@ -207,3 +207,67 @@ def add_face_part():
         db.rollback()
         cursor.close()
         return jsonify({"title": "Error", "message": "Error inserting data" + str(e)}), 500
+
+@teacher_bp.route('/get-user-profile/<int:employee_id>', methods=['GET'])
+def get_user_transaction(employee_id):
+    try:
+        db = create_db_connection() 
+        cursor = db.cursor()
+
+        query = """SELECT 
+                e.employee_id, 
+                e.first_name,
+                e.last_name,
+                e.face_image,
+                eye.eyebrows,
+                l.leyes,
+                r.reyes,
+                n.nose,
+                m.mouth
+            FROM tbl_empdata AS e
+            LEFT JOIN tbl_eyebrows AS eye
+            USING(employee_id)
+            LEFT JOIN tbl_leyes AS l
+            USING(employee_id)
+            LEFT JOIN tbl_reyes AS r
+            USING(employee_id)
+            LEFT JOIN tbl_nose AS n
+            USING(employee_id)
+            LEFT JOIN tbl_mouth AS m
+            USING(employee_id)
+            WHERE employee_id = %s
+            GROUP BY e.employee_id
+            LIMIT 1
+            """
+        cursor.execute(query, (employee_id,)) 
+        result = cursor.fetchall()
+
+        data = [
+            {
+                "employee_id": row[0],
+                "first_name": row[1],
+                "last_name": row[2],
+                "face_image": base64.b64encode(row[3]).decode('utf-8'),
+                "eyebrows": base64.b64encode(row[4]).decode('utf-8'),
+                "leyes": base64.b64encode(row[5]).decode('utf-8'),
+                "reyes": base64.b64encode(row[6]).decode('utf-8'),
+                "nose": base64.b64encode(row[7]).decode('utf-8'),
+                "mouth": base64.b64encode(row[8]).decode('utf-8')
+            }
+            for row in result
+        ]
+        
+        return jsonify({
+            "title": "Success",
+            "message": "Fetched user profile successfully",
+            "data": data[0]
+        })
+    except Exception as e:
+        return jsonify({
+            "title": "Error",
+            "message": "Error fetching the data: " + str(e)
+        }), 500
+    finally:
+        if 'db' in locals(): 
+            cursor.close()
+            db.close()

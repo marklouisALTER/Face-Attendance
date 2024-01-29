@@ -42,3 +42,34 @@ export const useUserAttendance = create<attendanceType>((set) => ({
     userAttendance: [],
     updateUserAttendance: (newUserAttendance) => set({userAttendance: newUserAttendance})
 }))
+
+type selectedUserInfo = {
+    userInfo: {
+      employee_id: number;
+      first_name: string;
+      last_name: string;
+      face_image: string;
+      eyebrows: string;
+      leyes: string;
+      reyes: string;
+      nose: string;
+      mouth: string;
+    };
+    updateUserInfo: (value: selectedUserInfo['userInfo']) => void;
+  };
+  
+  export const useSelectedUserProfile = create<selectedUserInfo>((set) => ({
+    userInfo: {
+      employee_id: 0,
+      first_name: '',
+      last_name: '',
+      face_image: '',
+      eyebrows: '',
+      leyes: '',
+      reyes: '',
+      nose: '',
+      mouth: '',
+    },
+    updateUserInfo: (value) => set({ userInfo: value }),
+  }));
+  
