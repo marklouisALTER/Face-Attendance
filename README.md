@@ -1,4 +1,4 @@
-# Your Project Name
+# Face Recognition Attendance 
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
