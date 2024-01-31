@@ -238,7 +238,7 @@ const handleReset = (clearFilters: () => void) => {
                             </div>
                         </div>
                         <div className='col-span-2 flex flex-col gap-2'>
-                            <h1 className='font-secondary font-semibold text-primary'>AVG Face Recognition</h1>
+                            <h1 className='font-secondary font-semibold text-primary'>AVG Face Accuracy</h1>
                             <h1 className='font-secondary font-semibold text-secondary'>100</h1>
                         </div>
                     </div>
