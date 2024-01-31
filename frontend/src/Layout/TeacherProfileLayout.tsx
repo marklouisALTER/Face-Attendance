@@ -97,15 +97,21 @@ const TeacherProfileLayout:React.FC = () => {
     return(
         <div>
             <Breadcrumbs />
-            <Link to={'../tracking-record/attendance-record'}>
-                Go back to attendance
-            </Link>
+            
             <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-5'>
                 <div className='bg-white rounded-xl border overflow-hidden'>
-                    <div className='w-full h-[20rem] md:h-[24rem] bg-white'>
+                    <div className='relative w-full h-[20rem] md:h-[24rem] bg-white'>
+                        <div className='top-4 left-4 absolute'>
+                            <Link 
+                                to={'../tracking-record/attendance-record'}
+                                className='text-white'
+                                >
+                                Go back to attendance
+                            </Link>
+                        </div>
                         <div className='bg-primary w-full h-[12rem] md:h-[15rem]'>
                             <div className='w-full h-full flex items-center justify-center'>
-                                <div className='border border-secondary mt-[14rem]
+                                <div className='border-4 border-primary mt-[14rem]
                                     w-[10rem] h-[10rem] rounded-full left-[32%] top-[15%] bg-white
                                     md:w-[12rem] md:h-[12rem] lg:w-[15rem] lg:h-[15rem] overflow-hidden'>
                                     <Image src={`data:image/png;base64,${userInfo.face_image}`} alt='user profile' className='rounded-full'/>
@@ -139,6 +145,10 @@ const TeacherProfileLayout:React.FC = () => {
                             className={({isActive}) => isActive ? 'text-secondary font-secondary': 'text-primary font-secondary hover:text-secondary' }>
                             User Attendance
                         </NavLink>
+                        <NavLink to={'atttendance-stats'}
+                            className={({isActive}) => isActive ? 'text-secondary font-secondary': 'text-primary font-secondary hover:text-secondary' }>
+                            Attendance Stats
+                        </NavLink>
                         <NavLink to={'user-photos'}
                             className={({isActive}) => isActive ? 'text-secondary font-secondary': 'text-primary font-secondary hover:text-secondary' }>
                             All Image Photo
@@ -161,3 +171,4 @@ const TeacherProfileLayout:React.FC = () => {
 }
 
 export default TeacherProfileLayout;
+// SELECT employee_id, ROUND(AVG(overall_perc), 2) AS avg_face, COUNT(*) AS total_transaction FROM tbl_transac WHERE employee_id = 45 GROUP BY employee_id; 
