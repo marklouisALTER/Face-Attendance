@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { BiLogInCircle } from 'react-icons/bi'
 import axios from 'axios';
@@ -26,6 +26,11 @@ export const SignIn:React.FC = () => {
   const from = location?.state?.from || '/dashboard'; // it will check if there is a state from the location, if there is none, it will go to the dashboard
   const navigate = useNavigate();
   const { login } = Authentication();
+
+
+  useEffect(() => {
+    document.title = 'Sign In'
+  },[])
 
   // Submit the login function
   const onFinish = async (values : userLogin) => {

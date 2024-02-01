@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { SignIn } from './Pages/SignIn'
 import { lazy, Suspense } from 'react'
 import { Spin } from 'antd'
+import { LazyLoding } from './components/LazyLoading/LazyLoding'
 import { UserAttendanceTable } from './components/ProfileStats/UserAttendanceTable'
 import { UserPhotos } from './components/ProfileStats/UserPhotos'
 const Dashboard = lazy(() => import('./Pages/admin/Dashboard'))
@@ -14,6 +15,7 @@ const TransactionHistory = lazy(() => import('./Pages/admin/TransactionHistory')
 const TeacherProfileLayout = lazy(() => import('./Layout/TeacherProfileLayout'))
 const UserTransactionTable = lazy(() => import('./components/ProfileStats/UserTransactionTable'))
 const AttendanceRecordLayout = lazy(() => import('./Layout/AttendanceRecordLayout'))
+
 function App() {
 
   return (
@@ -23,31 +25,31 @@ function App() {
         <Route path="/" element={<SignIn />} />
         <Route path="/dashboard" element={<AdminLayout />} >
           <Route index element={
-            <Suspense fallback={<div className='w-full h-screen flex items-center justify-center'><Spin /></div>}>
+            <Suspense fallback={<div className='w-full h-screen flex items-center justify-center'><LazyLoding /></div>}>
               <Dashboard />
             </Suspense>
           } 
           />
           <Route path="tracking-record/employee-profile" element={
-            <Suspense fallback={<div className='w-full h-screen flex items-center justify-center'><Spin /></div>}>
+            <Suspense fallback={<div className='w-full h-screen flex items-center justify-center'><LazyLoding /></div>}>
               <TeacherProfile />
             </Suspense>
           } />
           
           <Route path="tracking-record/attendance-record" element={
-            <Suspense fallback={<div className='w-full h-screen flex items-center justify-center'><Spin /></div>}>
+            <Suspense fallback={<div className='w-full h-screen flex items-center justify-center'><LazyLoding /></div>}>
               <AttendanceRecordLayout />
             </Suspense>
           }>
             <Route index element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<div><LazyLoding /></div>}>
                 <AttendanceRecord />
               </Suspense>
             } />
           </Route>
           {/* Viewing employee stats profile */}
           <Route path="attendance-record/profile-stats/:id" element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div><LazyLoding /></div>}>
               <TeacherProfileLayout />
             </Suspense>
           }>
@@ -72,17 +74,17 @@ function App() {
           </Route>
 
           <Route path="monitoring-control/new-teacher" element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div><LazyLoding /></div>}>
               <NewTeacher />
             </Suspense>
           } />
           <Route path="capture-face" element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div><LazyLoding /></div>}>
               <Capture />
             </Suspense>
           } />
           <Route path="transaction-history" element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div><LazyLoding /></div>}>
               <TransactionHistory />
             </Suspense>
           } />

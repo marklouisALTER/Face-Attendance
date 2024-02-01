@@ -81,6 +81,7 @@ def all_teacher():
         return jsonify({"title": "Error", "message": "Error Fetching data: " + str(e)}), 500
     finally:
         cursor.close()
+from flask import jsonify
 
 
 @teacher_bp.route('/delete-teacher', methods=['DELETE'])
@@ -271,3 +272,39 @@ def get_user_transaction(employee_id):
         if 'db' in locals(): 
             cursor.close()
             db.close()
+
+
+@teacher_bp.route('/teacher-percentage/<int:employee_id>', methods=['GET'])
+def teacher_percentage(employee_id):
+    cursor = db.cursor()
+    try:
+        query = """
+        SELECT 
+            e.employee_id, 
+            ROUND(AVG(t.overall_perc), 2) AS avg_face_accuracy, 
+            COUNT(*) AS total_user_transaction 
+        FROM tbl_empdata AS e 
+        INNER JOIN tbl_transac AS t
+        USING(employee_id)
+        WHERE employee_id = %s
+        GROUP BY e.employee_id;
+        """
+
+        cursor.execute(query, (employee_id,))
+        result = cursor.fetchone()
+
+        if result:
+            response = {
+                "employee_id": result[0],
+                "avg_face_accuracy": result[1],
+                "total_user_transaction": result[2]
+            }
+            return jsonify(response), 200
+        else:
+            return jsonify({"title": "Error", "message": "No data found for the specified employee_id"}), 404
+    
+    except Exception as e:
+        return jsonify({"title": "Error", "message": "Error Fetching data: " + str(e)}), 500
+    finally:
+        cursor.close()
+

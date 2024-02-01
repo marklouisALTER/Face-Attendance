@@ -72,4 +72,32 @@ type selectedUserInfo = {
     },
     updateUserInfo: (value) => set({ userInfo: value }),
   }));
+
   
+  type userPercentageType = {
+    data: {
+      employee_id: number;
+      avg_face_accuracy: number;
+      total_user_transaction: number;
+    } | null,
+    error: string | null;
+    isLoading: boolean;
+    fetchData: (employee_id: number | undefined) => void;
+
+  }
+
+export const useUserPercentage = create<userPercentageType>((set)=>({
+    data: null,
+    error: null,
+    isLoading: false,
+    fetchData: async (employee_id) => {
+      set({isLoading: true, error: null});
+      try{
+        const response = await fetch(`http://localhost:5000/teachers/teacher-percentage/${employee_id}`);	
+        const data = await response.json();
+        set({ data, isLoading: true})
+      }catch(error){
+        set({error: 'Error Fetching Data', isLoading: false})
+      }
+    }
+  }))

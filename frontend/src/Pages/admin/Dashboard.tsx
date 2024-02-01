@@ -1,29 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Authentication } from '../../Authentication/Authentication';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
-import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
-import { Alert, Calendar } from 'antd';
-import Chart from 'react-apexcharts';
-import { heatmapData } from '../../components/Graph/GraphLabel';
+import { Image, Progress } from 'antd';
+import { DashboardTeacherCard } from '../../components/TeacherCard/DashboardTeacherCard';
+
 
 const Dashboard: React.FC = () => {
   const { isAuthenticated } = Authentication();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [value, setValue] = useState<Dayjs>(dayjs());
-  const [selectedValue, setSelectedValue] = useState<Dayjs>(dayjs());
-
-  const onSelect = (newValue: Dayjs) => {
-    setValue(newValue);
-    setSelectedValue(newValue);
-  };
-
-  const onPanelChange = (newValue: Dayjs) => {
-    setValue(newValue);
-  };
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -33,49 +20,31 @@ const Dashboard: React.FC = () => {
 
 
 
-  const heatmapOptions = {
-    options: {
-      
-      
-    },
-    series: heatmapData,
-  };
 
   return (
     <div className='w-full h-screen'>
       <Breadcrumbs />
-      <div className='w-full h-full grid grid-rows-3 gap-5 py-5'>
-        <div className='bg-white'>
-          
-        </div>
-        <div className='row-span-2 grid grid-cols-3 gap-5'>
-          <div className='col-span-2 bg-white flex items-center justify-center'>
-          <Chart
-            options={
-                {
-                    chart: {
-                        type: 'heatmap',
-                    },
-                    dataLabels: {
-                        enabled: false,
-                    },
-                    colors: ['#008FFB'],
-                    title: {
-                        text: 'Attendance Graph',
-                    },
-                }
-            }
-            series={heatmapOptions.series}
-            type='heatmap'
-            height={350}
-            width={800}
-          />
+      <div className='w-full h-screen'>
+        <div className='h-[5rem] flex justify-center md:justify-end gap-10 mt-5'>
+          <div className='flex flex-col items-center'>
+            <h1 className='text-xl md:text-3xl font-bold font-secondary text-primary'>2</h1>
+            <h1 className='font-secondary text-secondary text-xs md:text-sm'>Total Teacher</h1>
           </div>
-          <div className='bg-white border rounded-xl overflow-x-auto px-5'>
-            <div className='p-5'>
-                <Alert message={`The date today is ${selectedValue?.format('YYYY-MM-DD')}`} />
-            </div>
-            <Calendar value={value} onSelect={onSelect} onPanelChange={onPanelChange} />
+          <div className='flex flex-col items-center'>
+            <h1 className='text-xl md:text-3xl font-bold font-secondary text-primary'>20</h1>
+            <h1 className='font-secondary text-secondary text-xs md:text-sm'>Total Transaction</h1>
+          </div>
+          <div className='flex flex-col items-center'>
+            <h1 className='text-xl md:text-3xl font-bold font-secondary text-primary'>50</h1>
+            <h1 className='font-secondary text-secondary text-xs md:text-sm'>Total Attendance</h1>
+          </div>
+        </div>
+        <div className='my-5'>
+          <h1 className='font-primary text-xl text-primary'>All Employees</h1>
+        </div>
+        <div className='w-full h-full'>
+          <div className=' grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
+            <DashboardTeacherCard />
           </div>
         </div>
       </div>
