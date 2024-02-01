@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
-import { Image } from 'antd'
+import { Image, Progress } from 'antd'
 import { Link, NavLink, useParams } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import axios from 'axios';
 import { useUserSessionStore } from '../Store/ManagementState';
-import { useSelectedUserProfile, useUserAttendance, useUserTransaction } from '../Store/userStateManagement';
+import { useSelectedUserProfile, useUserAttendance, useUserPercentage, useUserTransaction } from '../Store/userStateManagement';
 import { StatusModal } from '../components/Modal/StatusModal';
 const TeacherProfileLayout:React.FC = () => {
     const { id } = useParams();
@@ -21,6 +21,8 @@ const TeacherProfileLayout:React.FC = () => {
     const updateUserAttendance = useUserAttendance(state => state.updateUserAttendance);
     const updateUserInfo = useSelectedUserProfile(state => state.updateUserInfo);
     const userInfo = useSelectedUserProfile(state => state.userInfo);
+    const { fetchData } = useUserPercentage();
+
     useEffect(() => {
         document.title = 'Teacher Profile'
 
@@ -88,10 +90,13 @@ const TeacherProfileLayout:React.FC = () => {
                 setStatusModal(true)
             }
         }
-        getUserInformation()
-        getUserAttendance()
-        getUserTransaction()
+        getUserInformation() // get the user information function
+        getUserAttendance() // get the attendance of the user function
+        getUserTransaction() // get all the transaction of the user function
+    
+    const employee_id = id ? Number(id) : undefined;
 
+    fetchData(employee_id);
     },[id, token])
     console.log(userInfo)
     return(
@@ -128,10 +133,19 @@ const TeacherProfileLayout:React.FC = () => {
                     <div className='mt-14 flex items-center justify-center'>
                         <h1 className='font-secondary text-xl font-semibold text-secondary'>User Information</h1>
                     </div>
-                    <div className='w-full mt-5 py-5 grid grid-cols-3 px-5 gap-5 h-[15rem]'>
-                        <div className='border border-black'></div>
-                        <div className='border border-black'></div>
-                        <div className='border border-black'></div>
+                    <div className='w-full flex flex-col mt-5 py-5 px-5 gap-5 h-[15rem]'>
+                        <div>
+                            <h1 className='font-secondary'>Attendance Percentage Line</h1>
+                            <Progress percent={40} size={'default'}/>
+                        </div>
+                        <div>
+                            <h1 className='font-secondary'>Attendance Percentage Line</h1>
+                            <Progress percent={40} size={'default'}/>
+                        </div>
+                        <div>
+                            <h1 className='font-secondary'>Attendance Percentage Line</h1>
+                            <Progress percent={40} size={'default'}/>
+                        </div>
                     </div>
                 </div>
                 <div className='bg-white rounded-xl p-5 shadow-md shadow-gray-300'>
@@ -145,10 +159,10 @@ const TeacherProfileLayout:React.FC = () => {
                             className={({isActive}) => isActive ? 'text-secondary font-secondary': 'text-primary font-secondary hover:text-secondary' }>
                             User Attendance
                         </NavLink>
-                        <NavLink to={'atttendance-stats'}
+                        {/* <NavLink to={'atttendance-stats'}
                             className={({isActive}) => isActive ? 'text-secondary font-secondary': 'text-primary font-secondary hover:text-secondary' }>
                             Attendance Stats
-                        </NavLink>
+                        </NavLink> */}
                         <NavLink to={'user-photos'}
                             className={({isActive}) => isActive ? 'text-secondary font-secondary': 'text-primary font-secondary hover:text-secondary' }>
                             All Image Photo
@@ -171,4 +185,3 @@ const TeacherProfileLayout:React.FC = () => {
 }
 
 export default TeacherProfileLayout;
-// SELECT employee_id, ROUND(AVG(overall_perc), 2) AS avg_face, COUNT(*) AS total_transaction FROM tbl_transac WHERE employee_id = 45 GROUP BY employee_id; 

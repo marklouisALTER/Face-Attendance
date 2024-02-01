@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import Highlighter from 'react-highlight-words';
-import { Table, Button, Input, Space } from 'antd';
+import { Table, Button, Input, Space, Spin } from 'antd';
 import type { GetRef, TableColumnsType, TableColumnType } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
 import { SearchOutlined } from '@ant-design/icons';
-import { useUserTransaction } from '../../Store/userStateManagement';
+import { useUserPercentage, useUserTransaction } from '../../Store/userStateManagement';
 import { DownloadOutlined } from '@ant-design/icons';
 import { RiFilePaperFill } from "react-icons/ri";
 
@@ -31,6 +31,7 @@ const [searchText, setSearchText] = useState('');
 const [searchedColumn, setSearchedColumn] = useState('');
 const searchInput = useRef<InputRef | null>(null);
 const userTransaction = useUserTransaction(state => state.userTransaction);
+const { data, isLoading, error} = useUserPercentage();
 
 const handleSearch = (
     selectedKeys: string[],
@@ -228,7 +229,7 @@ const handleReset = (clearFilters: () => void) => {
                         </div>
                         <div className='col-span-2 flex flex-col gap-2'>
                             <h1 className='font-secondary font-semibold text-primary'>Total User Transaction</h1>
-                            <h1 className='font-secondary font-semibold text-secondary'>100</h1>
+                            <h1 className='font-secondary font-semibold text-secondary'>{data ? data.total_user_transaction : isLoading ? <Spin /> : 0}</h1>
                         </div>
                     </div>
                     <div className='border-2 rounded-xl grid grid-cols-3 p-5'>
@@ -239,7 +240,7 @@ const handleReset = (clearFilters: () => void) => {
                         </div>
                         <div className='col-span-2 flex flex-col gap-2'>
                             <h1 className='font-secondary font-semibold text-primary'>AVG Face Accuracy</h1>
-                            <h1 className='font-secondary font-semibold text-secondary'>100</h1>
+                            <h1 className='font-secondary font-semibold text-secondary'>{data ? data.avg_face_accuracy : isLoading ? <Spin /> : 0}</h1>
                         </div>
                     </div>
                 </div>
