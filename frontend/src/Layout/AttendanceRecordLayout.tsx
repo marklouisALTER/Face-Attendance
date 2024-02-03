@@ -78,7 +78,7 @@ const AttendanceRecordLayout:React.FC = () => {
 }, [token, updateAttendanceRecord])
 
   return (
-    <div className='w-full h-screen'>
+    <div className='w-full'>
         <Breadcrumbs />
         <div className=' h-full flex flex-col gap-5'>
             <div className='container w-full h-[17rem] overflow-x-auto flex items-center overflow-hidden'>

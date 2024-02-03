@@ -27,7 +27,7 @@ type teacherProfile = {
 };
 
 interface TeacherTableProps {
-    data: teacherProfile[];
+    data?: teacherProfile[];
     loading: boolean;
 }
 
@@ -270,7 +270,7 @@ export const TeacherTable: React.FC<TeacherTableProps> = ({ data, loading }) => 
             bordered={true}
             loading={loading}
             columns={columns}
-            dataSource={data.map((record) => ({...record, key: record.employee_id}))}
+            dataSource={data?.map((record) => ({...record, key: record.employee_id}))}
             pagination={{ pageSize: 5 }}
             expandable={{
               expandedRowRender: (record) => <div key={`${record.employee_id}`} className='grid grid-cols-5'>

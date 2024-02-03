@@ -3,8 +3,8 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { MdCheckCircle } from "react-icons/md";
 
 type status = {
-    title: string;
-    comment: string;
+    title: string | null;
+    comment: string | null;
     toggle: () => void;
 }
 export const StatusModal:React.FC<status> = ({ title, comment, toggle }) => {
