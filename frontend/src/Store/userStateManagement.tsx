@@ -95,9 +95,56 @@ export const useUserPercentage = create<userPercentageType>((set)=>({
       try{
         const response = await fetch(`http://localhost:5000/teachers/teacher-percentage/${employee_id}`);	
         const data = await response.json();
-        set({ data, isLoading: true})
+        set({ data, isLoading: false})
       }catch(error){
         set({error: 'Error Fetching Data', isLoading: false})
       }
     }
   }))
+
+type userProfileType = {
+  error: boolean;
+  isLoading: boolean;
+  title: string | null;
+  comment: string | null;
+  userProfile: {
+    data: {
+      employee_id: number;
+      first_name: string;
+      last_name: string;
+      face_image: string;
+      eyebrows: string;
+      lefteye: string; // I assumed 'lefteye' property, adjust it based on your actual data
+      righteye: string; // I assumed 'righteye' property, adjust it based on your actual data
+      nose: string;
+      mouth: string;
+    }[];
+  } | null;
+  fetchData: (token: string) => void;
+  updateData: () => void;
+}
+
+export const useProfileApi = create<userProfileType>((set) => ({
+  userProfile: {data: []},
+  error: false,
+  title: null,
+  comment: null,
+  isLoading: false,
+  fetchData: async (token) => {
+    set({isLoading: true});
+    try{
+      const response = await fetch('http://localhost:5000/teachers/profile',{
+        method: 'GET',
+        headers: {
+          'Authorization': token
+        }
+      }
+      );
+      const userProfile = await response.json();
+      set({isLoading: false, userProfile})
+    }catch(err){
+      set({title:'Error', error: true, isLoading: false})
+    }
+  },
+  updateData: () => ({error: false})
+}))

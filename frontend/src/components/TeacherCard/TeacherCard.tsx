@@ -29,7 +29,10 @@ export const TeacherCard:React.FC<teacherInfoTypeProps> = ({teacherInfo}) => {
                     <div className='w-14 h-14 rounded-full border border-primary group-hover:border-secondary overflow-hidden'>
                         <Image 
                             src={`data:image/png;base64,${teacher.face_image}`}
-                            className='rounded-full'
+                            alt="Employee Profile"
+                            width={56}
+                            height={56}
+                            className='rounded-full  object-cover'
                         />
                     </div>
                     <div className='flex flex-col justify-center items-center'>

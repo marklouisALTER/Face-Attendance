@@ -23,8 +23,11 @@ def load_known_faces():
     known_names = []
     known_first_names = []
 
+    read_count = 0
+
     for employee_id, last_name, first_name, face_blob in cursor:
-        # Convert the binary face_blob to a numpy array
+        read_count += 1
+
         face_image = np.frombuffer(face_blob, dtype=np.uint8)
 
         # Decode the image
@@ -49,6 +52,9 @@ def load_known_faces():
             known_first_names.append(first_name)
 
     cursor.close()
+
+    print(f"Total records iterated in the database: {read_count}")
+    
     return known_faces, known_id, known_names, known_first_names
 
 def connect_dots(image, landmarks, dot_indices, color):
@@ -145,9 +151,9 @@ def recognize_faces(image_path):
                         'Mouth': round((1 - mouth_distances[0]) * 100, 2),
                     }
                 })
-
+                print("Match found:", result) 
                 return result
-
+    print("No match found.")
     return result
 
 @face_recognition_bp.route('/detect_faces', methods=['POST'])
