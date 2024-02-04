@@ -101,7 +101,7 @@ export const UserAttendanceTable:React.FC = () => {
             .includes((value as string).toLowerCase()),
         onFilterDropdownOpenChange: (visible: boolean) => {
         if (visible) {
-            setTimeout(() => searchInput.current?.select(), 100);
+            // setTimeout(() => searchInput.current?.select(), 100);
         }
     },
     render: (text: string) =>

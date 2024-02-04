@@ -31,7 +31,7 @@ const [searchText, setSearchText] = useState('');
 const [searchedColumn, setSearchedColumn] = useState('');
 const searchInput = useRef<InputRef | null>(null);
 const userTransaction = useUserTransaction(state => state.userTransaction);
-const { data, isLoading, error} = useUserPercentage();
+const { data, isLoading} = useUserPercentage();
 
 const handleSearch = (
     selectedKeys: string[],

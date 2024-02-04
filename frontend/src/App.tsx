@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { SignIn } from './Pages/SignIn'
 import { lazy, Suspense } from 'react'
-import { Spin } from 'antd'
 import { LazyLoding } from './components/LazyLoading/LazyLoding'
 import { UserAttendanceTable } from './components/ProfileStats/UserAttendanceTable'
 import { UserPhotos } from './components/ProfileStats/UserPhotos'
