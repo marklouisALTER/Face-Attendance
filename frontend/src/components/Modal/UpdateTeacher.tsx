@@ -12,7 +12,7 @@ type updateTeacher = {
   first_name: string;
   last_name: string;
   face_image: string;
-  imageupload: Blob[];
+  imageupload: File[];
 }
 
 export const UpdateTeacher:React.FC = () => {
@@ -85,14 +85,18 @@ export const UpdateTeacher:React.FC = () => {
 
   const handleFileChange = (info: any) => {
     if (info.file.status === 'done') {
-      console.log('Uploaded file:', info.file);
+        console.log('Uploaded file:', info.file);
 
-      // Set the uploaded file in the form values
-      form.setFieldsValue({
-        imageupload: [info.file.originFileObj],
-      });
+        // Check if the uploaded file is a File
+        if (info.file.originFileObj instanceof File) {
+            // Set the uploaded file in the form values
+            form.setFieldsValue({
+                imageupload: [info.file.originFileObj],
+            });
+        }
     }
-  };
+};
+
   
   const handleUpdateClick = () => {
     form.setFieldsValue({
