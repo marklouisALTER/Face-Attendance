@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import { useState } from 'react';
 
 type userType = {
     user: string;
@@ -8,6 +9,9 @@ type userType = {
 export const Authentication = () => {
     const [user, setUser] = useState<string | null>();
     const [token, setToken] = useState<string | null>();
+
+    console.log(user)
+    console.log(token)
 
     const getToken = () => {
         const tokenString = sessionStorage.getItem('token');

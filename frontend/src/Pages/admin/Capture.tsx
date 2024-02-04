@@ -13,8 +13,8 @@ import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 
 
 const Capture:React.FC = () => {
-    const [imageFile, setImageFile] = useState(null);
-    const [detectedImage, setDetectedImage] = useState<string | null>(null);
+    // const [imageFile, setImageFile] = useState(null);
+    // const [detectedImage, setDetectedImage] = useState<string | null>(null);
     const [imageFileWillSent, setImageFileWillSent] = useState<string | null>(null);
     const [overallAccuracy, setOverallAccuracy] = useState<string | null>(null);
     const [employeeId, setEmployeeId] = useState<number | null>(null);
@@ -105,8 +105,8 @@ const Capture:React.FC = () => {
                 'Content-Type': 'multipart/form-data',
             },
         })
-            const blob = new Blob([response.data.image_path], { type: 'image/jpeg' });
-            setDetectedImage(URL.createObjectURL(blob));
+            // const blob = new Blob([response.data.image_path], { type: 'image/jpeg' });
+            // setDetectedImage(URL.createObjectURL(blob));
             setOverallAccuracy(response.data.overall_percentage);
             setFeatureAccuracies(response.data.feature_accuracies);
             setEmployeeId(response.data.employee_id);

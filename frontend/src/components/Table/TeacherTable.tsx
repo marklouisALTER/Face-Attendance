@@ -159,7 +159,7 @@ export const TeacherTable: React.FC<TeacherTableProps> = ({ data, loading }) => 
         .includes((value as string).toLowerCase()),
     onFilterDropdownOpenChange: (visible: boolean) => {
       if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
+        // setTimeout(() => searchInput.current?.select(), 100);
       }
     },
     render: (text: string) =>
