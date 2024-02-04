@@ -9,7 +9,7 @@ import { StatusModal } from '../Modal/StatusModal';
 type userInfo = {
     firstname : string;
     lastname: string;
-    imageupload: Blob[];
+    imageupload: File[];
 }
 
 
@@ -25,6 +25,7 @@ export const UserInformation:React.FC = () => {
     }) 
 
     console.log(token);
+    const [form] = Form.useForm();
 
     const onFinish = async (values: userInfo) => {
         setLoading(true);
@@ -76,8 +77,17 @@ export const UserInformation:React.FC = () => {
     const handleFileChange = (info: UploadChangeParam) => {
         if (info.file.status === 'done') {
             console.log('Uploaded file:', info.file);
+    
+            // Check if the uploaded file is a File
+            if (info.file.originFileObj instanceof File) {
+                // Set the uploaded file in the form values
+                form.setFieldsValue({
+                    imageupload: [info.file.originFileObj],
+                });
+            }
         }
     };
+    
   return (
     <div className='flex flex-col items-center justify-center'>
         <div className='my-10'>

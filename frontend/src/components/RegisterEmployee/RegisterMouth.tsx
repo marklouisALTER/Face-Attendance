@@ -7,7 +7,7 @@ import { useFormStore, useUserSessionStore } from '../../Store/ManagementState'
 import { StatusModal } from '../Modal/StatusModal'
 import axios from 'axios';
 type userMouth = {
-    imageupload: Blob[];
+    imageupload: File[];
 }
 
 export const RegisterMouth:React.FC = () => {
