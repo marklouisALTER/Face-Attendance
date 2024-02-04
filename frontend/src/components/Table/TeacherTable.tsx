@@ -13,6 +13,7 @@ import { FaSortAmountUp,FaSortAmountUpAlt } from "react-icons/fa";
 import { MdSort } from "react-icons/md";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
+import { useProfileApi } from '../../Store/userStateManagement';
 
 type teacherProfile = {
     employee_id: number;
@@ -36,7 +37,6 @@ type DataIndex = keyof teacherProfile;
 
 export const TeacherTable: React.FC<TeacherTableProps> = ({ data, loading }) => {
     const [statusModal, setStatusModal] = useState<boolean>(false);
-    const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const [statusModalMessage, setStatusModalMessage] = useState<{title: string, message: string}>({
         title: '',
         message: ''
@@ -44,7 +44,6 @@ export const TeacherTable: React.FC<TeacherTableProps> = ({ data, loading }) => 
     const setTeacherId = useTeacherIdentity(state => state.setTeacherId)
     const setUpdateModal = useUpdateModal(state => state.setUpdateModal)
     const token = useUserSessionStore(state => state.formSession['token']);
-
 
     const handleDelete = async (employee_id: number) => {
       try{
@@ -58,8 +57,13 @@ export const TeacherTable: React.FC<TeacherTableProps> = ({ data, loading }) => 
           title: response.data.title,
           message: response.data.message
         })
-        setIsSuccess(true)
         setStatusModal(true)
+        useProfileApi.setState((prev) => ({
+          userProfile: {
+            ...prev.userProfile,
+            data: (prev.userProfile?.data || []).filter((teacher) => teacher.employee_id !== employee_id)
+          }
+        }));
       }catch(err: any){
         setStatusModalMessage({
           title: err.response.data.title,
@@ -389,9 +393,6 @@ export const TeacherTable: React.FC<TeacherTableProps> = ({ data, loading }) => 
               toggle={() => {
                 setStatusModal(prevState => !prevState)
 
-                if(isSuccess){ // it will refresh the page if success after the modal is closed
-                  window.location.reload()
-                }
               }}
             />
           }
