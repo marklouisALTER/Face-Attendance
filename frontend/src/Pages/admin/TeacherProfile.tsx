@@ -17,7 +17,7 @@ const TeacherProfile:React.FC = () => {
     }, [])
 
     return(
-        <div className='w-full h-screen'>
+        <div className='w-full'>
             <Breadcrumbs />
             {/* Teacher profile table */}
             <div className='mt-10'>

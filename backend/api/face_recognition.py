@@ -5,7 +5,7 @@ import cv2
 import face_recognition
 import uuid
 import os
-from datetime import timedelta, datetime
+from datetime import datetime
 from db import create_db_connection
 
 face_recognition_bp = Blueprint('/face_recognition', __name__)
@@ -54,107 +54,26 @@ def load_known_faces():
     cursor.close()
 
     print(f"Total records iterated in the database: {read_count}")
-    
+
     return known_faces, known_id, known_names, known_first_names
+
+known_faces, known_id, known_names, known_first_names = load_known_faces()
+
+def find_matching_face(encoding_to_check):
+    # Compare the given face encoding with known faces in the database
+    matches = face_recognition.compare_faces(known_faces, encoding_to_check)
+
+    for i, match in enumerate(matches):
+        if match:
+            return known_id[i], known_first_names[i], known_names[i]
+
+    return None, None, None
 
 def connect_dots(image, landmarks, dot_indices, color):
     for i in range(len(dot_indices) - 1):
         start_point = (landmarks.part(dot_indices[i]).x, landmarks.part(dot_indices[i]).y)
         end_point = (landmarks.part(dot_indices[i + 1]).x, landmarks.part(dot_indices[i + 1]).y)
         cv2.line(image, start_point, end_point, color, 1)
-
-def recognize_faces(image_path):
-
-    known_faces, known_id, known_names, known_first_names = load_known_faces()
-
-    image = cv2.imread(image_path)
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    detector = dlib.get_frontal_face_detector()
-    faces = detector(gray)
-
-    result = {'match': False}
-
-    for face in faces:
-        landmarks = predictor(gray, face)
-
-        x, y, w, h = face.left(), face.top(), face.width(), face.height()
-        cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 2)
-
-        # Draw small dots for facial landmarks
-        for i in range(68):
-            x, y = landmarks.part(i).x, landmarks.part(i).y
-            cv2.circle(image, (x, y), 1, (0, 255, 0), -1)
-
-        # Connect dots with lines
-        connect_dots(image, landmarks, [17, 18, 19, 20, 21], (0, 255, 0))  # Connect left eyebrow
-        connect_dots(image, landmarks, [22, 23, 24, 25, 26], (0, 255, 0))  # Connect right eyebrow
-        connect_dots(image, landmarks, list(range(36, 42)), (0, 0, 255))  # Connect left eye
-        connect_dots(image, landmarks, list(range(42, 48)), (0, 0, 255))  # Connect right eye
-        connect_dots(image, landmarks, list(range(29, 36)), (255, 0, 0))  # Connect nose
-        connect_dots(image, landmarks, list(range(48, 68)), (0, 255, 255)) 
-
-        # Extract the face encoding for recognition
-        unknown_encoding = face_recognition.face_encodings(image, [(face.top(), face.right(), face.bottom(), face.left())])[0]
-
-        # Compare with known faces
-        results = face_recognition.compare_faces(known_faces, unknown_encoding)
-
-        for i, result in enumerate(results):
-            if result:
-                matched_name = known_names[i]
-                matched_id = known_id[i]
-                matched_firstname = known_first_names[i]
-                result = {'match': True, 'last_name': matched_name, 'first_name': matched_firstname, 'employee_id': matched_id}
-
-                # Display accuracy for individual facial features
-                feature_accuracies = []
-
-                # Nose accuracy
-                nose_landmarks = list(range(29, 36))
-                nose_distances = face_recognition.face_distance([known_faces[i][nose_landmarks]], unknown_encoding[nose_landmarks])
-                feature_accuracies.append((1 - nose_distances[0]) * 100)
-
-                # Left eye accuracy
-                left_eye_landmarks = list(range(36, 42))
-                left_eye_distances = face_recognition.face_distance([known_faces[i][left_eye_landmarks]], unknown_encoding[left_eye_landmarks])
-                feature_accuracies.append((1 - left_eye_distances[0]) * 100)
-
-                # Right eye accuracy
-                right_eye_landmarks = list(range(42, 48))
-                right_eye_distances = face_recognition.face_distance([known_faces[i][right_eye_landmarks]], unknown_encoding[right_eye_landmarks])
-                feature_accuracies.append((1 - right_eye_distances[0]) * 100)
-
-                # Left eyebrow accuracy
-                left_eyebrow_landmarks = [17, 18, 19, 20, 21]
-                left_eyebrow_distances = face_recognition.face_distance([known_faces[i][left_eyebrow_landmarks]], unknown_encoding[left_eyebrow_landmarks])
-                feature_accuracies.append((1 - left_eyebrow_distances[0]) * 100)
-
-                # Right eyebrow accuracy
-                right_eyebrow_landmarks = [22, 23, 24, 25, 26]
-                right_eyebrow_distances = face_recognition.face_distance([known_faces[i][right_eyebrow_landmarks]], unknown_encoding[right_eyebrow_landmarks])
-                feature_accuracies.append((1 - right_eyebrow_distances[0]) * 100)
-
-                # Mouth accuracy
-                mouth_landmarks = list(range(48, 68))
-                mouth_distances = face_recognition.face_distance([known_faces[i][mouth_landmarks]], unknown_encoding[mouth_landmarks])
-                feature_accuracies.append((1 - mouth_distances[0]) * 100)
-
-                # Add accuracy for each feature to the result
-                result.update({
-                    'feature_accuracies': {
-                        'Nose': round( (1 - nose_distances[0]) * 100, 2),
-                        'Left Eye': round((1 - left_eye_distances[0]) * 100, 2),
-                        'Right Eye': round((1 - right_eye_distances[0]) * 100, 2),
-                        'Left Eyebrow': round((1 - left_eyebrow_distances[0]) * 100, 2),
-                        'Right Eyebrow': round((1 - right_eyebrow_distances[0]) * 100, 2),
-                        'Mouth': round((1 - mouth_distances[0]) * 100, 2),
-                    }
-                })
-                print("Match found:", result) 
-                return result
-    print("No match found.")
-    return result
 
 @face_recognition_bp.route('/detect_faces', methods=['POST'])
 def detect_faces_endpoint():
@@ -168,19 +87,14 @@ def detect_faces_endpoint():
     temp_image_path = './temp/temp_image.jpg'
     file.save(temp_image_path)
 
-    result = recognize_faces(temp_image_path)
-
     recog_id = str(uuid.uuid4())
     current_date = datetime.today()
     formatted_date = current_date.strftime("%Y%m%d")
-    
+
     image_file_name = 'EMP_TRANS_{}_{}.jpg'.format(formatted_date, recog_id)
     image_file_path = os.path.join('./temp', image_file_name)
-    
-    result['transaction_id'] = 'EMP_TRANS_{}_{}'.format(formatted_date, recog_id)
 
-
-    #mag sasave yung image
+    # Mag sasave yung image
     image = cv2.imread(temp_image_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     detector = dlib.get_frontal_face_detector()
@@ -189,65 +103,104 @@ def detect_faces_endpoint():
     for face in faces:
         landmarks = predictor(gray, face)
 
-        # Mag dradrawing ng box around face 
+        # Mag dradrawing ng box around face
         x, y, w, h = face.left(), face.top(), face.width(), face.height()
-        cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
         for i in range(68):
             x, y = landmarks.part(i).x, landmarks.part(i).y
             cv2.circle(image, (x, y), 1, (0, 255, 0), -1)
 
-        connect_dots(image, landmarks, [17, 18, 19, 20, 21], (0, 255, 0))  
-        connect_dots(image, landmarks, [22, 23, 24, 25, 26], (0, 255, 0)) 
-        connect_dots(image, landmarks, list(range(36, 42)), (0, 0, 255)) 
-        connect_dots(image, landmarks, list(range(42, 48)), (0, 0, 255)) 
-        connect_dots(image, landmarks, list(range(29, 36)), (255, 0, 0)) 
-        connect_dots(image, landmarks, list(range(48, 68)), (0, 255, 255))  
+        # Display the detected face
+        # cv2.imshow('Detected Face', image)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
-    cv2.imwrite(image_file_path, image)
+        encoding_to_check = face_recognition.face_encodings(image, [(   # Extract the encoding of the detected face
+            face.top(),
+            face.right(),
+            face.bottom(),
+            face.left()
+        )])[0]
+        # print("Encoding to check:", encoding_to_check)
 
-    image_with_landmarks = image.copy()
-    for face in faces:
-        landmarks = predictor(gray, face)
-        connect_dots(image_with_landmarks, landmarks, [17, 18, 19, 20, 21], (0, 255, 0)) 
-        connect_dots(image_with_landmarks, landmarks, [22, 23, 24, 25, 26], (0, 255, 0))  
-        connect_dots(image_with_landmarks, landmarks, list(range(36, 42)), (0, 0, 255))  
-        connect_dots(image_with_landmarks, landmarks, list(range(42, 48)), (0, 0, 255)) 
-        connect_dots(image_with_landmarks, landmarks, list(range(29, 36)), (255, 0, 0))  
-        connect_dots(image_with_landmarks, landmarks, list(range(48, 68)), (0, 255, 255))  
+        employee_id, first_name, last_name = find_matching_face(encoding_to_check)  # Find a matching face in the database
 
-    cv2.imwrite('./temp/detected_features.jpg', image_with_landmarks)
+        if employee_id is not None:  # Debug print: print the known faces and their encodings
+            print("Known IDs:", known_id)
+            print("Known Encodings:", known_faces)
 
-    overall_accuracy = sum(result['feature_accuracies'].values()) / len(result['feature_accuracies'])
-    result['overall_accuracy'] = round(overall_accuracy, 2)
+            feature_accuracies = calculate_feature_accuracies(landmarks, encoding_to_check)
 
-    result['image_path'] = f'/temp/{image_file_name}'
+            overall_percentage = round(sum(feature_accuracies.values()) / len(feature_accuracies), 2)
 
-    cursor = db.cursor()
-    query = """
-    INSERT INTO tbl_transac (
-        transaction_id, employee_id, face_image, eyebrows_perc, reyes_perc, leyes_perc, 
-        nose_perc, mouth_perc, created_At, overall_perc
-    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    """
+            cv2.imwrite(image_file_path, image)
+            
+            cursor = db.cursor()
+            query = """
+            INSERT INTO tbl_transac (
+                transaction_id, employee_id, face_image, eyebrows_perc, reyes_perc, leyes_perc, 
+                nose_perc, mouth_perc, created_at, overall_perc
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
 
-    # Use the values from the 'result' dictionary
-    values = (
-        result.get('transaction_id'),
-        result.get('employee_id'),
-        result.get('image_path'),
-        result['feature_accuracies']['Left Eyebrow'],
-        result['feature_accuracies']['Left Eye'],
-        result['feature_accuracies']['Right Eye'],
-        result['feature_accuracies']['Nose'],
-        result['feature_accuracies']['Mouth'],
-        datetime.now(),
-        result.get('overall_accuracy'),
-    )
+            # Generate a transaction_id (you may need to implement this)
+            transaction_id = str(uuid.uuid4())
 
-    cursor.execute(query, values)
+            # Use the values from the 'result' dictionary
+            values = (
+                transaction_id,
+                employee_id,
+                image_file_path,
+                feature_accuracies['Left Eyebrow'],
+                feature_accuracies['Left Eye'],
+                feature_accuracies['Right Eye'],
+                feature_accuracies['Nose'],
+                feature_accuracies['Mouth'],
+                datetime.now(),
+                overall_percentage,
+            )
 
-    db.commit()
-    cursor.close()
+            cursor.execute(query, values)
+            db.commit()
+            cursor.close()
 
-    return jsonify(result)
+            return jsonify({'title': 'Success', 'message': 'Employee found', 'employee_id': employee_id,
+                            'first_name': first_name, 'last_name': last_name,
+                            'feature_accuracies': feature_accuracies,
+                            'overall_percentage': overall_percentage,
+                            'image_path': image_file_path}) 
+        else:
+            return jsonify({'title': 'Error', 'message': 'No matching employee found'}), 404
+
+    return jsonify({'title': 'Error', 'message': 'No face detected'}), 404
+
+
+def calculate_feature_accuracies(landmarks, encoding_to_check):
+    feature_accuracies = {}
+
+    nose_landmarks = list(range(29, 36))
+    nose_distances = face_recognition.face_distance([known_faces[0][nose_landmarks]], encoding_to_check[nose_landmarks])
+    feature_accuracies['Nose'] = round((1 - nose_distances[0]) * 100, 2)
+
+    left_eye_landmarks = list(range(36, 42))
+    left_eye_distances = face_recognition.face_distance([known_faces[0][left_eye_landmarks]], encoding_to_check[left_eye_landmarks])
+    feature_accuracies['Left Eye'] = round((1 - left_eye_distances[0]) * 100, 2)
+
+    right_eye_landmarks = list(range(42, 48))
+    right_eye_distances = face_recognition.face_distance([known_faces[0][right_eye_landmarks]], encoding_to_check[right_eye_landmarks])
+    feature_accuracies['Right Eye'] = round((1 - right_eye_distances[0]) * 100, 2)
+
+    left_eyebrow_landmarks = [17, 18, 19, 20, 21]
+    left_eyebrow_distances = face_recognition.face_distance([known_faces[0][left_eyebrow_landmarks]], encoding_to_check[left_eyebrow_landmarks])
+    feature_accuracies['Left Eyebrow'] = round((1 - left_eyebrow_distances[0]) * 100, 2)
+
+    right_eyebrow_landmarks = [22, 23, 24, 25, 26]
+    right_eyebrow_distances = face_recognition.face_distance([known_faces[0][right_eyebrow_landmarks]], encoding_to_check[right_eyebrow_landmarks])
+    feature_accuracies['Right Eyebrow'] = round((1 - right_eyebrow_distances[0]) * 100, 2)
+
+    mouth_landmarks = list(range(48, 68))
+    mouth_distances = face_recognition.face_distance([known_faces[0][mouth_landmarks]], encoding_to_check[mouth_landmarks])
+    feature_accuracies['Mouth'] = round((1 - mouth_distances[0]) * 100, 2)
+
+    return feature_accuracies
