@@ -2,7 +2,7 @@ from flask import jsonify, request, Blueprint
 from db import create_db_connection
 import base64
 
-teacher_bp = Blueprint('teachers', __name__)
+teacher_bp = Blueprint('/teachers', __name__)
 
 db = create_db_connection()
 

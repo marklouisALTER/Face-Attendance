@@ -29,7 +29,7 @@ export const MainMenu:React.FC<MainMenuProps> = ({children}) => {
     <div>        
         <Layout className='w-full h-full'>
             <Header className='bg-primary flex justify-between items-center px-4'>
-                <h1 className='text-white font-secondary text-2xl'>PMCI Attendance</h1>
+                <h1 className='text-white font-secondary text-2xl'>Resibo Pilipinas</h1>
                 
             </Header>
             <Layout>

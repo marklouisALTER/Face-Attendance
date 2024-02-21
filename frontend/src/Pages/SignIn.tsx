@@ -155,6 +155,9 @@ export const SignIn:React.FC = () => {
                   Submit 
                 </Button>
               </Form.Item>
+              <div className='flex justify-end'>
+                <h1>Forgot password ?</h1>
+              </div>
             </Form>
         </div>
         {error &&
