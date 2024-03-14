@@ -100,6 +100,8 @@ def detect_faces_endpoint():
     detector = dlib.get_frontal_face_detector()
     faces = detector(gray)
 
+    detected_face_path = './temp/detected_features.jpg'
+
     for face in faces:
         landmarks = predictor(gray, face)
 
@@ -116,12 +118,13 @@ def detect_faces_endpoint():
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
 
-        encoding_to_check = face_recognition.face_encodings(image, [(   # Extract the encoding of the detected face
+        encoding_to_check = face_recognition.face_encodings(image, [(  # Extract the encoding of the detected face
             face.top(),
             face.right(),
             face.bottom(),
             face.left()
         )])[0]
+
         # print("Encoding to check:", encoding_to_check)
 
         employee_id, first_name, last_name = find_matching_face(encoding_to_check)  # Find a matching face in the database

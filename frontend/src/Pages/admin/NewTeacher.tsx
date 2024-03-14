@@ -4,11 +4,11 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Stepper } from '../../components/Steps/Stepper'
 import { useFormStore } from '../../Store/ManagementState'
 import { UserInformation } from '../../components/RegisterEmployee/UserInformation'
-import { RegisterEyebrows } from '../../components/RegisterEmployee/RegisterEyebrows'
-import { RegisterLeftEye } from '../../components/RegisterEmployee/RegisterLeftEye'
-import { RegisterRightEye } from '../../components/RegisterEmployee/RegisterRightEye'
-import { RegisterNose } from '../../components/RegisterEmployee/RegisterNose'
-import { RegisterMouth } from '../../components/RegisterEmployee/RegisterMouth'
+// import { RegisterEyebrows } from '../../components/RegisterEmployee/RegisterEyebrows'
+// import { RegisterLeftEye } from '../../components/RegisterEmployee/RegisterLeftEye'
+// import { RegisterRightEye } from '../../components/RegisterEmployee/RegisterRightEye'
+// import { RegisterNose } from '../../components/RegisterEmployee/RegisterNose'
+// import { RegisterMouth } from '../../components/RegisterEmployee/RegisterMouth'
 import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs'
 const NewTeacher:React.FC = () => {
 
@@ -26,16 +26,16 @@ const NewTeacher:React.FC = () => {
         switch(step){
             case 0:
                 return <UserInformation />
-            case 1:
-                return <RegisterEyebrows />
-            case 2:
-                return <RegisterLeftEye />
-            case 3: 
-                return <RegisterRightEye />
-            case 4:
-                return <RegisterNose />
-            case 5: 
-                return <RegisterMouth />
+            // case 1:
+            //     return <RegisterEyebrows />
+            // case 2:
+            //     return <RegisterLeftEye />
+            // case 3: 
+            //     return <RegisterRightEye />
+            // case 4:
+            //     return <RegisterNose />
+            // case 5: 
+            //     return <RegisterMouth />
         }
     }
 

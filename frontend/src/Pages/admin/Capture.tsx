@@ -190,11 +190,7 @@ const Capture:React.FC = () => {
                     <h1 className='font-secondary mt-5'>Transaction ID : {showTransactionId}</h1>
                     <div className='flex flex-col items-center mt-5 justify-center'>
                         <div className='p-10 border-2 bg-gray-100 rounded-xl'>
-                            <Image 
-                                className='w-full h-full object-cover rounded-md'
-                                src={logo} 
-                                alt="Detected Face" 
-                            />
+                            
                         </div>
                         <div className='mt-10 w-full grid grid-cols-4 gap-1'>
                             <div className='col-span-1 bg-gray-100 border-2 rounded-tl-xl rounded-bl-xl flex items-center justify-center'>

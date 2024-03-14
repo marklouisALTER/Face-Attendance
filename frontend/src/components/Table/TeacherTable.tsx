@@ -276,113 +276,113 @@ export const TeacherTable: React.FC<TeacherTableProps> = ({ data, loading }) => 
             columns={columns}
             dataSource={data?.map((record) => ({...record, key: record.employee_id}))}
             pagination={{ pageSize: 5 }}
-            expandable={{
-              expandedRowRender: (record) => <div key={`${record.employee_id}`} className='grid grid-cols-5'>
-                <div className='flex flex-col'>
-                  <h1 className="font-secondary">Eyebrows</h1>
-                  <div className='flex items-center gap-3 m-auto'>
-                    <a
-                        href={`data:image/png;base64,${record?.eyebrows}`}
-                        download={`picture_${record?.eyebrows}.png`} 
-                        className='text-primary'
-                    >
-                        <MdOutlineFileDownload />
-                    </a>
-                    <a
-                        href={`data:image/png;base64,${record?.eyebrows}`}
-                        target='_blank'
-                        rel='noreferrer'
-                        className='text-primary'
-                    >
-                        <FaRegEye />
-                    </a>
-                  </div>
-                </div>
-                <div className='flex flex-col'>
-                  <h1 className="font-secondary">Lefteye</h1>
-                  <div className='flex items-center gap-3 m-auto'>
-                    <a
-                        href={`data:image/png;base64,${record?.lefteye}`}
-                        download={`picture_${record?.lefteye}.png`} 
-                        className='text-primary'
-                    >
-                        <MdOutlineFileDownload />
-                    </a>
-                    <a
-                        href={`data:image/png;base64,${record?.lefteye}`}
-                        target='_blank'
-                        rel='noreferrer'
-                        className='text-primary'
-                    >
-                        <FaRegEye />
-                    </a>
-                  </div>
-                </div>
-                <div className='flex flex-col'>
-                  <h1 className="font-secondary">Righteye</h1>
-                  <div className='flex items-center gap-3 m-auto'>
-                    <a
-                        href={`data:image/png;base64,${record?.lefteye}`}
-                        download={`picture_${record?.lefteye}.png`} 
-                        className='text-primary'
-                    >
-                        <MdOutlineFileDownload />
-                    </a>
-                    <a
-                        href={`data:image/png;base64,${record?.lefteye}`}
-                        target='_blank'
-                        rel='noreferrer'
-                        className='text-primary'
-                    >
-                        <FaRegEye />
-                    </a>
-                  </div>
-                </div>
-                <div className='flex flex-col'>
-                  <h1 className="font-secondary">Nose</h1>
-                  <div className='flex items-center gap-3 m-auto'>
-                    <a
-                        href={`data:image/png;base64,${record?.nose}`}
-                        download={`picture_${record?.nose}.png`} 
-                        className='text-primary'
-                    >
-                        <MdOutlineFileDownload />
-                    </a>
-                    <a
-                        href={`data:image/png;base64,${record?.nose}`}
-                        target='_blank'
-                        rel='noreferrer'
-                        className='text-primary'
-                    >
-                        <FaRegEye />
-                    </a>
-                  </div>
-                </div>
-                <div className='flex flex-col'>
-                  <h1 className="font-secondary">Mouth</h1>
-                  <div className='flex items-center gap-3 m-auto'>
-                    <a
-                        href={`data:image/png;base64,${record?.mouth}`}
-                        download={`picture_${record?.mouth}.png`} 
-                        className='text-primary'
-                    >
-                        <MdOutlineFileDownload />
-                    </a>
-                    <a
-                        href={`data:image/png;base64,${record?.mouth}`}
-                        target='_blank'
-                        rel='noreferrer'
-                        className='text-primary'
-                    >
-                        <FaRegEye />
-                    </a>
-                  </div>
-                  {/* <Image src={`data:image/png;base64,${record.mouth}`} /> */}
-                  {/* <Image src={` /> */}
-                </div>
-              </div>,
+            // expandable={{
+            //   expandedRowRender: (record) => <div key={`${record.employee_id}`} className='grid grid-cols-5'>
+            //     <div className='flex flex-col'>
+            //       <h1 className="font-secondary">Eyebrows</h1>
+            //       <div className='flex items-center gap-3 m-auto'>
+            //         <a
+            //             href={`data:image/png;base64,${record?.eyebrows}`}
+            //             download={`picture_${record?.eyebrows}.png`} 
+            //             className='text-primary'
+            //         >
+            //             <MdOutlineFileDownload />
+            //         </a>
+            //         <a
+            //             href={`data:image/png;base64,${record?.eyebrows}`}
+            //             target='_blank'
+            //             rel='noreferrer'
+            //             className='text-primary'
+            //         >
+            //             <FaRegEye />
+            //         </a>
+            //       </div>
+            //     </div>
+            //     <div className='flex flex-col'>
+            //       <h1 className="font-secondary">Lefteye</h1>
+            //       <div className='flex items-center gap-3 m-auto'>
+            //         <a
+            //             href={`data:image/png;base64,${record?.lefteye}`}
+            //             download={`picture_${record?.lefteye}.png`} 
+            //             className='text-primary'
+            //         >
+            //             <MdOutlineFileDownload />
+            //         </a>
+            //         <a
+            //             href={`data:image/png;base64,${record?.lefteye}`}
+            //             target='_blank'
+            //             rel='noreferrer'
+            //             className='text-primary'
+            //         >
+            //             <FaRegEye />
+            //         </a>
+            //       </div>
+            //     </div>
+            //     <div className='flex flex-col'>
+            //       <h1 className="font-secondary">Righteye</h1>
+            //       <div className='flex items-center gap-3 m-auto'>
+            //         <a
+            //             href={`data:image/png;base64,${record?.lefteye}`}
+            //             download={`picture_${record?.lefteye}.png`} 
+            //             className='text-primary'
+            //         >
+            //             <MdOutlineFileDownload />
+            //         </a>
+            //         <a
+            //             href={`data:image/png;base64,${record?.lefteye}`}
+            //             target='_blank'
+            //             rel='noreferrer'
+            //             className='text-primary'
+            //         >
+            //             <FaRegEye />
+            //         </a>
+            //       </div>
+            //     </div>
+            //     <div className='flex flex-col'>
+            //       <h1 className="font-secondary">Nose</h1>
+            //       <div className='flex items-center gap-3 m-auto'>
+            //         <a
+            //             href={`data:image/png;base64,${record?.nose}`}
+            //             download={`picture_${record?.nose}.png`} 
+            //             className='text-primary'
+            //         >
+            //             <MdOutlineFileDownload />
+            //         </a>
+            //         <a
+            //             href={`data:image/png;base64,${record?.nose}`}
+            //             target='_blank'
+            //             rel='noreferrer'
+            //             className='text-primary'
+            //         >
+            //             <FaRegEye />
+            //         </a>
+            //       </div>
+            //     </div>
+            //     <div className='flex flex-col'>
+            //       <h1 className="font-secondary">Mouth</h1>
+            //       <div className='flex items-center gap-3 m-auto'>
+            //         <a
+            //             href={`data:image/png;base64,${record?.mouth}`}
+            //             download={`picture_${record?.mouth}.png`} 
+            //             className='text-primary'
+            //         >
+            //             <MdOutlineFileDownload />
+            //         </a>
+            //         <a
+            //             href={`data:image/png;base64,${record?.mouth}`}
+            //             target='_blank'
+            //             rel='noreferrer'
+            //             className='text-primary'
+            //         >
+            //             <FaRegEye />
+            //         </a>
+            //       </div>
+            //       {/* <Image src={`data:image/png;base64,${record.mouth}`} /> */}
+            //       {/* <Image src={` /> */}
+            //     </div>
+            //   </div>,
 
-            }}
+            // }}
             scroll={{ x: 1300 }}
             />
         

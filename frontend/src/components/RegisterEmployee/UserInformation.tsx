@@ -163,13 +163,13 @@ export const UserInformation:React.FC = () => {
                 Register  
             </Button>
         </Form>
-            <Button
+            {/* <Button
                 type="default" 
                 htmlType="submit"
                 onClick={setIncrementStep}
                 className='bg-white border border-transparent w-full mt-2 hover:border hover:border-primary text-primary'>
                 Next  
-            </Button>
+            </Button> */}
         {error &&
             <StatusModal title={modalMessage.title} comment={modalMessage.message} toggle={()=> {
                 setError(prevState => !prevState);
